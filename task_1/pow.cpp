@@ -3,22 +3,15 @@
 
 //complexity 0(n)
 double desiAlgo(double x, int n){
-    if(n==0){
-        return 1;
-    }else if(n>0) {
-        return x*desiAlgo(x,(n-1));
-    }
+    if(n==0) return 1;
+    else if(n>0) return x*desiAlgo(x,(n-1));
     return 0;
 }
 //complexity is log2(n)
 double desiAlgo2(double x, int n){
-    if(n==0){
-        return 1;
-    }else if(n%2 == 1){
-        return x*desiAlgo2(x*x,(n-1)/2);
-    }else if(n%2 == 0){
-        return desiAlgo2(x*x,n/2);
-    }
+    if(n==0) return 1;
+    else if(n%2 == 1) return x*desiAlgo2(x*x,(n-1)/2);
+    else if(n%2 == 0) return desiAlgo2(x*x,n/2);
     return 0;
 }
 //complexity log2(n)
