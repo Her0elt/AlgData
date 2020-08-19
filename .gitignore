@@ -1,5 +1,14 @@
 **/cmake-build-debug
 CMakeLists.txt
 .idea
+Other_tasks
+.DS_Store
+.sfdx
+.project
+.salesforce
+.settings
+node_modules
+.idea
+.vscode
 
 
