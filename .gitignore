@@ -1,3 +1,7 @@
+*
+!*.*
+!*/
+
 **/cmake-build-debug
 CMakeLists.txt
 .idea
@@ -10,8 +14,6 @@ Other_tasks
 node_modules
 .idea
 .vscode
-*
-!*.*
-!*/
+
 
 
