@@ -1,5 +1,18 @@
 #include <stdio.h>
 #include  <tgmath.h>
+#include <ctime>
+#include <iostream>
+
+double getUnixTime(void)
+{
+    struct timespec tv;
+
+    if(clock_gettime(CLOCK_REALTIME, &tv) != 0) return 0;
+
+    //return (tv.tv_sec + (tv.tv_nsec / 1000000000.0));
+    return tv.tv_nsec;
+}
+
 
 //complexity 0(n)
 double algo(double x, int n){
@@ -19,9 +32,24 @@ double cppPow(double x, int n){
     return pow(x,n);
 }
 int main() {
+    double start_time = getUnixTime();
+    double stop_time, difference;
     printf("task 1 %f\n", algo(3,3));
-    printf("task 2 %f\n", algo2(3,3));
-    printf("task 3 %f\n", cppPow(3,3));
+    stop_time = getUnixTime();
+    difference = stop_time - start_time;
+    printf("%f nanoseconds used\n", difference);
+
+    start_time = getUnixTime();
+    printf("task 1 %f\n", algo(3,3));
+    stop_time = getUnixTime();
+    difference = stop_time - start_time;
+    printf("%f nanoseconds used\n", difference);
+
+    start_time = getUnixTime();
+    printf("task 1 %f\n", algo(3,3));
+    stop_time = getUnixTime();
+    difference = stop_time - start_time;
+    printf("%f nanoseconds used\n", difference);
 
 }
 

@@ -10,5 +10,8 @@ Other_tasks
 node_modules
 .idea
 .vscode
+*
+!*.*
+!*/
 
 
