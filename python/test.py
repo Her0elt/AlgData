@@ -12,5 +12,5 @@ def pythonPow(x,n):
     return pow(x,n)
 
 print("task 1 ", desiAlgo(3,3))
-print("task 2 ", desiAlgo2(3,3))
+print("task 2 ", desiAlgo(3,3))
 print("task 3 ", pythonPow(3,3))
