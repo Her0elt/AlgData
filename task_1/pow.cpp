@@ -1,18 +1,10 @@
 #include <stdio.h>
-#include  <tgmath.h>
-#include <ctime>
+#include <tgmath.h>
 #include <iostream>
+#include <functional>
+#include <time.h>   
 
-double getUnixTime(void)
-{
-    struct timespec tv;
-
-    if(clock_gettime(CLOCK_REALTIME, &tv) != 0) return 0;
-
-    //return (tv.tv_sec + (tv.tv_nsec / 1000000000.0));
-    return tv.tv_nsec;
-}
-
+int seconds = 1;
 
 //complexity 0(n)
 double algo(double x, int n){
@@ -27,28 +19,35 @@ double algo2(double x, int n){
     else if(n%2 == 0) return algo2(x*x,n/2);
     return 0;
 }
-double cppPow(double x, int n){
-    return pow(x,n);
+
+double testTime(double x, int n, std::function<double (double,int)> func){
+    time_t start, end;
+    int count = 0;
+    start = time(NULL);
+    while(difftime(time(NULL), start) < seconds) {
+        func(x, n);
+        count++;
+    }
+    return count/seconds;
+    
 }
 int main() {
-    double start_time = getUnixTime();
-    double stop_time, difference;
-    printf("task 1 %f\n", algo(3,3));
-    stop_time = getUnixTime();
-    difference = stop_time - start_time;
-    printf("%f nanoseconds used\n", difference);
 
-    start_time = getUnixTime();
-    printf("task 1 %f\n", algo(3,3));
-    stop_time = getUnixTime();
-    difference = stop_time - start_time;
-    printf("%f nanoseconds used\n", difference);
+    printf("answer algo  for 2, 10 %f\n", algo(2,10));
+    printf("answer algo2 for 2, 10 %f\n", algo2(2,10));
+    printf("answer pow for 2, 10 %f\n", pow(2,10));
 
-    start_time = getUnixTime();
-    printf("task 1 %f\n", algo(3,3));
-    stop_time = getUnixTime();
-    difference = stop_time - start_time;
-    printf("%f nanoseconds used\n", difference);
+    printf("\ntest 1 algo %f times per second\n", testTime(3,3, algo));
+    printf("test 2 algo %f times per second\n", testTime(2,10, algo));
+    printf("test 3 algo %f times per second\n", testTime(3,14, algo));
+
+     printf("\ntest 1 algo2 %f times per second\n", testTime(3,3, algo2));
+    printf("test 2 algo2 %f times per second\n", testTime(2,10, algo2));
+    printf("test 3 algo2 %f times per second\n", testTime(3,14, algo2));
+
+     printf("\ntest 1 pow %f times per second\n", testTime(3,3, pow));
+    printf("test 2 pow %f times per second\n", testTime(2,10, pow));
+    printf("test 3 pow %f times per second\n", testTime(3,14, pow));
 
 }
 
