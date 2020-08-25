@@ -1,7 +1,7 @@
 def desiAlgo(x,n):
     if(n == 0): return 1
     else: return x*desiAlgo(x,n-1)
-
+    
 def desiAlgo2(x,n):
     if(n==0): return 1
     elif(n%2 == 1): return x*desiAlgo2(x*x,(n-1)/2)
