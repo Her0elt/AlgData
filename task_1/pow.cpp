@@ -9,7 +9,8 @@ int seconds = 1;
 
 //time complexity 0(n)
 //This complexity comes from computing the algorithme, 
-//which reduces my 1 every recursion which gives us a time complexity of O(n)
+//which reduces my 1 every recursion until it hits 0 
+//which gives us a time complexity of O(n)
 double algo(double x, int n){
     if(n==0) return 1;
     else if(n>0) return x*algo(x,(n-1));
@@ -75,6 +76,9 @@ int main() {
     testTime(x,1000, pow);      
     testTime(x,100000, pow);
 
+    //As we can see from running this program algo is alot slower then algo2 
+    //when n grows lager and lager. the pow function beats both the algorithmes,
+    //that is because it has a time complexity of O(1)
 }
 
 
