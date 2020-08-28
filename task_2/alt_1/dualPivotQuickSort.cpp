@@ -1,15 +1,12 @@
-// C++ program to implement dual pivot QuickSort 
 #include <stdlib.h>
 #include <stdio.h>
 #include <functional>
-#include <time.h>  
 #include <chrono>
-#include <iostream>
 
-using namespace std; 
+using namespace std;
+using namespace chrono;
 
-int seconds = 1;
-int count = 10000;
+long count = 10000000;
   
 int partition(int* arr, int low, int high, int* lp); 
   
@@ -23,7 +20,7 @@ void swap(int* a, int* b)
 void DualPivotQuickSort(int* arr, int low, int high) 
 { 
     if (low < high) { 
-        // lp means left pivot, and rp means right pivot. 
+
         int lp, rp; 
         rp = partition(arr, low, high, &lp); 
         DualPivotQuickSort(arr, low, lp - 1); 
@@ -34,24 +31,21 @@ void DualPivotQuickSort(int* arr, int low, int high)
   
 int partition(int* arr, int low, int high, int* lp) 
 { 
-    // low = low+(high-low)/3;
-    // high = high-(high+low)/3;
-    if (arr[low] > arr[high]) 
-        swap(&arr[low], &arr[high]); 
+    swap(&arr[low], &arr[(low + (high - low) / 3)]);
+	swap(&arr[high], &arr[(high - (high - low) / 3)]);
+    
+    if (arr[low] > arr[high]) swap(&arr[low], &arr[high]); 
   
-    // p is the left pivot, and q is the right pivot. 
     int j = low + 1; 
     int g = high - 1, k = low + 1, p = arr[low], q = arr[high]; 
     while (k <= g) { 
   
-        // if elements are less than the left pivot 
+        
         if (arr[k] < p) { 
             swap(&arr[k], &arr[j]); 
             j++; 
         } 
   
-        // if elements are greater than or equal 
-        // to the right pivot 
         else if (arr[k] >= q) { 
             while (arr[g] > q && k < g) 
                 g--; 
@@ -67,23 +61,20 @@ int partition(int* arr, int low, int high, int* lp)
     j--; 
     g++; 
   
-    // bring pivots to their appropriate positions. 
     swap(&arr[low], &arr[j]); 
     swap(&arr[high], &arr[g]); 
   
-    // returning the indices of the pivots. 
-    *lp = j; // because we cannot return two elements 
-    // from a function. 
+    *lp = j; 
   
     return g; 
 } 
 
 void testTime(int t[],int v, int h, std::function<void (int [],int,int)> func){
-    auto t1 = std::chrono::high_resolution_clock::now();
+    auto t1 = high_resolution_clock::now();
     func(t,v,h);
-    auto t2 = std::chrono::high_resolution_clock::now();
-    double nano_sec = std::chrono::duration_cast<std::chrono::nanoseconds>(t2-t1).count();
-    printf("%f nanoseconds\n",nano_sec);    
+    auto t2 = high_resolution_clock::now();
+    double milli_sec = duration_cast<milliseconds>(t2-t1).count();
+    printf("%f milliseconds\n",milli_sec);    
 }
 
 long checkSum(int t[]){
@@ -99,7 +90,7 @@ bool checkSorted(int t[]){
     }
     return true;
 }
-// Driver code 
+ 
 int main() 
 { 
     int ran[count]; 

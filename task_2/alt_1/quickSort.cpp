@@ -1,14 +1,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <functional>
-#include <time.h>  
 #include <chrono>
+
+using namespace std;
+using namespace chrono;
 
 void swap(int *i, int *j);
 int median3Sort(int t[], int v, int h);
 
-int count = 100000;
-int seconds = 1;
+int count = 10000000;
 
 int split(int t[], int v, int h){
     int iv, ih;
@@ -49,11 +50,11 @@ void quicksort(int t[], int v, int h){
     }
 }
 void testTime(int t[],int v, int h, std::function<void (int [],int,int)> func){
-    auto t1 = std::chrono::high_resolution_clock::now();
+    auto t1 = high_resolution_clock::now();
     func(t,v,h);
-    auto t2 = std::chrono::high_resolution_clock::now();
-    double nano_sec = std::chrono::duration_cast<std::chrono::nanoseconds>(t2-t1).count();
-    printf("%f nanoseconds\n",nano_sec);    
+    auto t2 = high_resolution_clock::now();
+    double milli_sec = duration_cast<milliseconds>(t2-t1).count();
+    printf("%f milliseconds\n",milli_sec);    
 }
 
 long checkSum(int t[]){
@@ -74,7 +75,7 @@ int main(){
     int ran[count]; 
     int dup[count];
     int sort[count];
-    for(int i = 0; i<count; i++){
+    for(int i = 0; i<count-1; i++){
         ran[i] = rand()%100+1;
         sort[i] = i;
         if(i%2 == 0) dup[i] = rand()%100 +1;
