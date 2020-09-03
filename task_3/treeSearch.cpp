@@ -62,40 +62,40 @@ typedef struct{
 int findHeight(TreeNode *root) {
 		return root == NULL ? 0 : 1 + max(findHeight(root->left), findHeight(root->right));
 	}
-string makeSpace(int level, bool newLine=true){
+string makeSpace(int length, int level){
         string space = "";
-    for(int i = 0 ; i<level; i++){
-        (newLine)?space.append("\f\t"): space.append("  ");
+    for(int i = 0 ; i<length; i++){
+        space.append("        ");
     }
-    return space;
+    
+    return space.substr(0,length/level);
 }
 
 void printTreeBranch(TreeNode* root){
-    string s = "";
     if(root== NULL) return;
     queue<TreeNode*> q;
     q.push(root);
     q.push(NULL);
-    int space = pow(2,1+findHeight(root));
-    cout <<space <<"\n";
-    int level = findHeight(root);
+    int length = pow(2,2+findHeight(root));
+    int level = 1;
+    string output = "";
     while(true){
         TreeNode* curr = q.front();
         q.pop();
         if(curr != NULL){
-            if(curr == root) cout <<makeSpace(level);
-            cout << curr->element<< makeSpace(level, false);
+            string space = makeSpace(length, level);
+            output += space.substr(0,space.length()/2-curr->element.length()) + curr->element + space.substr(0,space.length()/2-curr->element.length());
             if(curr->left !=NULL)q.push(curr->left);
             if(curr->right !=NULL)q.push(curr->right);
         }else{
-            level--;
-            cout<<"\n"<<makeSpace(level);
+            level++;
+            output += "\n";
             if(q.empty()) break;
             q.push(NULL);
            
         }
-        space = space - 4;
     }
+    cout <<output;
 }
 void printTree(Tree* t){
      printTreeBranch(t->root);

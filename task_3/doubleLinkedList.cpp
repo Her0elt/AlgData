@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <stdio.h>
+#include <iomanip>
 
 using namespace std;
 
@@ -90,9 +91,13 @@ void calculate(DoubleLinked* l1, DoubleLinked* l2, string op){
     node1 = node1 -> last;
     node2 = (node2)? node2 ->last: nullptr;
 	}
-  printf("  %s\n",makeString(l1).c_str());
-  printf("%s %s\n",op.c_str(), makeString(l2).c_str());
-  printf("= %s\n", makeString(sum).c_str());
+  string n1 = makeString(l1).c_str();
+  string n2 = makeString(l2).c_str();
+  string n3 =  makeString(sum).c_str();
+  cout<<" "<<n1<<"\n";
+  cout<<op;
+  cout<<setw(n1.length())<<right<<n2<<"\n";
+  cout<<"="<< n3 <<"\n";
 }
 
 
@@ -105,6 +110,7 @@ int main(int argc, char *argv[]){
   string op = argv[2];
   string input1 = argv[1];
   string input2 = argv[3];
+
   for(int i = 0; i<input1.length();i++) {
       int num = input1[i]-'0';
       insertLast(l1, num);
