@@ -43,22 +43,27 @@ public class HashTable2 {
     public  int h_2_p(int t){
         return t%(arr.length-1)+1;
     }
+    public int probe(int index, int index2, int i){
+       return (index + index2*i)%(arr.length);
+    }
 
     public void insert(int t){
         int h = divHash(t);
         if(arr[h] == 0){
             arr[h] = t;
         }else{
-            int h2 =0;
-            for(int i= 1; i<arr.length;i++){
-                h2 =(h2+h_2_p(t))%(arr.length-1);
-                if(arr[h2]==0){
-                    arr[h2] = t;
+            int h2 = h_2_p(t);
+            int i = 0;
+            int n = h2;
+            while(true){
+                n = (n+h2)%arr.length;
+                if(arr[n]==0){
+                    arr[n] = t;
                     break;
-                }else{
-                    collisions++;
-                    i++;
                 }
+                collisions++;
+                i++;
+                
             }
         }
     }
@@ -67,19 +72,21 @@ public class HashTable2 {
         if(arr[h] == t){
             return arr[h];
         }else{
-            int h2 =0;
-            for(int i = 1; i<arr.length;i++){
-                h2 =(h2+h_2_p(t))%(arr.length-1);
-                if(arr[h2]==t){
-                    return arr[h2];
+            int h2 = h_2_p(t);
+            int i = 0;
+            int n = h2;
+            while(true){
+                n = (n+h2)%arr.length;
+                if(arr[n]==t){
+                    return arr[n];
                 }
+                i++;
             }
         }
-        return -1;
     }
 
     public static void main(String[] args) {
-        int length = 5000000;
+        int length = 10000000;
         int find = 212121;
         HashTable2 ht = new HashTable2(length);
         ht.insert(find);
