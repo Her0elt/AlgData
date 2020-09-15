@@ -79,7 +79,7 @@ public class HashTable2 {
     }
 
     public static void main(String[] args) {
-        int length = 1000000;
+        int length = 10000000;
         int find = 212121;
         HashTable2 ht = new HashTable2(length);
         ht.insert(find);
