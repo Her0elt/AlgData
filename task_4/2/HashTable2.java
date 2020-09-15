@@ -79,13 +79,14 @@ public class HashTable2 {
     }
 
     public static void main(String[] args) {
-        int length = 10000000;
+        int length = 5000000;
         int find = 212121;
         HashTable2 ht = new HashTable2(length);
         ht.insert(find);
         long start, end;
         long totalT = 0;
         int nr;
+        
         for(int i = 0; i<length-1;i++ ){
             nr = (int)(Math.random()*length*10);
             start = System.nanoTime();
@@ -93,6 +94,7 @@ public class HashTable2 {
             end = System.nanoTime();
             totalT += end-start;
         }
+        System.out.println("size: " + length);
         System.out.println("time: " + totalT/1000000 +"ms");
         System.out.println("a =" + (double)length/ht.arr.length);
         System.out.println("collisions: "+ ht.collisions);

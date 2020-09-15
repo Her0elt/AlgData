@@ -1,21 +1,21 @@
 import java.io.*;
 
-class HashNode{
-    public HashNode next;
-    public String data;
-
-    public HashNode(String data, HashNode next){
-        this.data = data;
-        this.next = next;
-    }
-    public HashNode(){}
-
-}
 class HashTabell{
+    class HashNode{
+        public HashNode next;
+        public String data;
+    
+        public HashNode(String data, HashNode next){
+            this.data = data;
+            this.next = next;
+        }
+        public HashNode(){}
+    
+    }
     private HashNode nodes[];
     private int length;
     private int collisions;
-
+    
     public HashTabell(int length){
         this.nodes = new HashNode[length/2];
         this.length = length/2;
@@ -58,18 +58,21 @@ class HashTabell{
         for(HashNode n : nodes){
             if(n != null){
                 temp = n;
-                output += temp.data;
                 people++;
+                if(temp.next != null) {
+                    output+= "\n";
+                    output += temp.data;
+                }
                 while(temp.next != null) {
                     temp = temp.next;
-                    output += "-->" + temp.data;
+                    output += "-->"+temp.data;
                     people++;
                 }
+                  
             }
-            output += "\n";
         }
         System.out.println("nr of collisions "+ collisions);
-        System.out.print(output);
+        System.out.println(output);
         System.out.println("Load factor "+(double)(people/length));
         System.out.println("avarage collisions pr person "+(double)(collisions/people));
 
