@@ -10,6 +10,7 @@ public class HashTable2 {
         this.collisions = 0;
     }
 
+
     public int multiHash(int t){
         double nr = t*A;
         nr -= (int)nr;
