@@ -26,55 +26,60 @@ class HashTabell{
         int nr = 1;
         int hash = 0;
         for(char n : s.toCharArray()){
-            hash += n*nr;
+            hash += n*7*nr;
             nr++;
         }
         return hash%length;
     }
 
     public void insert(String s){
+        String output = "";
         int h = hash(s);
         if(nodes[h] ==null){
             nodes[h] = new HashNode(s,null);
         }else{
+            output += nodes[h].data + "-->";
             nodes[h] = new HashNode(s,nodes[h]);;
+            output += nodes[h].data;
             collisions++;
+        }
+        if(!output.equals("")){
+            System.out.println(output);
+        }else{
+            System.out.print(output);
         }
     }
 
     public HashNode find(String s){
+        String output = "";
         int h = hash(s);
         HashNode temp = nodes[h];
+        output += temp.data;
         while(!temp.data.equals(s)){
             temp = temp.next;
+            output += "-->"+temp.data;
         }
+        System.out.println(output);
         return temp;
     }
 
-    public void print(){
-        String output = "";
+    public void print(){    
         HashNode temp;
         int people = 0;
         for(HashNode n : nodes){
             if(n != null){
                 temp = n;
                 people++;
-                if(temp.next != null) {
-                    output+= "\n";
-                    output += temp.data;
-                }
                 while(temp.next != null) {
                     temp = temp.next;
-                    output += "-->"+temp.data;
                     people++;
                 }
                   
             }
         }
         System.out.println("nr of collisions "+ collisions);
-        System.out.println(output);
         System.out.println("Load factor "+(double)(people/length));
-        System.out.println("avarage collisions pr person "+(double)(collisions/people));
+        System.out.println("avarage collisions pr person "+((double)collisions/(double)people));
 
     }
 
