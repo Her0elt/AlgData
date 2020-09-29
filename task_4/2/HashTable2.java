@@ -42,7 +42,7 @@ public class HashTable2 {
         return ((2*Math.abs(t))+1)%(arr.length);
     }
     public  int h_2_p(int t){
-        return (t%(PRIME-1))+1;//PRIME-(t%PRIME);
+        return PRIME-(t%PRIME);//(t%(PRIME-1))+1;//PRIME-(t%PRIME);
     }
     public int probe(int index, int index2, int i){
        return (index + index2*i)%(arr.length);

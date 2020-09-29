@@ -85,7 +85,7 @@ class Graph{
         } 
     }
     public static void main(String [] args){
-        String name = "L7g6";
+        String name = "L7g2";
         Graph g =null;
         try {
             BufferedReader b = new BufferedReader(new FileReader(new File(name)));
