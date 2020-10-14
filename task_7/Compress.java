@@ -22,7 +22,7 @@ class Compress {
             int match = checkInBuffer(bytes[i], bufferPos);
             if(match > -1){
                 cache += (char) bytes[i];
-                matchPos = (matchPos > -1 && matchPos+countMatches == match  )? matchPos : match; 
+                matchPos = (matchPos > -1)? matchPos : match; 
                 if(matchPos != -1) countMatches++; else countMatches = 0;
                 System.out.println("pos: "+i+ " matches: "+countMatches+ " byte: "+(char)bytes[i]+ "  "+bytes[i]+" matchpos: " +match);
             }else{
