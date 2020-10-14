@@ -2,19 +2,26 @@ import java.io.*;
 import java.util.*;  
 //I used a array list of a linked list to easierly connect the path is the graph
 //made it easier to visualize 
+
+class Node {		
+    int index;	
+    int time;
+    public Node(int i){this.index = i;}	
+}	
+
 class Graph{ 
     private int SCCCount;
     private int N;   
-    private ArrayList<LinkedList<Integer>> adj;  
+    private ArrayList<LinkedList<Node>> adj;  
     private int Time; 
     
     Graph(BufferedReader br) throws IOException {
         this. SCCCount = 0;
         StringTokenizer st = new StringTokenizer(br.readLine());
         this.N = Integer.parseInt(st.nextToken());  
-        this.adj = new ArrayList<LinkedList<Integer>>(); 
+        this.adj = new ArrayList<LinkedList<Node>>(); 
         for(int i = 0; i < N; ++i)  
-            adj.add(new LinkedList<Integer>());      
+            adj.add(new LinkedList<Node>());      
         this.Time = 0; 
         int K = Integer.parseInt(st.nextToken());
         for (int j = 0; j < K; j++) {
@@ -26,7 +33,7 @@ class Graph{
     }  
      
     void addEdge(int v,int w){  
-        adj.get(v).add(w);  
+        adj.get(v).add(new Node(w));  
     }
     
     void SCCUtil(int u, int low[], int disc[], boolean stackMember[],  Stack<Integer> st){ 
@@ -38,23 +45,27 @@ class Graph{
         stackMember[u] = true; 
         st.push(u); 
         int n; 
-        Iterator<Integer> i = adj.get(u).iterator();  
+        Iterator<Node> i = adj.get(u).iterator();  
         //finds all member nodes of u and adds a time form them
         while (i.hasNext()){  
-            n = i.next();  
+            n = i.next().index;  
             //checks if we have seen this node before
             //if not not we add the lowest discovered time to lowest
             if (disc[n] == -1){ 
                 SCCUtil(n, low, disc, stackMember, st); 
                 low[u] = Math.min(low[u], low[n]); 
             }else if (stackMember[n] == true){ 
+                // if the edge is still in the stack then we havent 
+                //found all its scc nodes
                 low[u] = Math.min(low[u], disc[n]); 
             } 
         }   
         //all of the above code makes sure that we find all nodes in the graph
-        //and ads a found time and a lowest found time
+        //and adds a found time and a lowest found time
         int w = -1;  
         //finds all the connected nodes in u's scc
+        //if u lowest is equal to det disc time then its the start of 
+        // a SSC 
         if (low[u] == disc[u]){
             if(N<100)System.out.print("#"+(this.SCCCount+1)+ " "); // pluss 1 because I     
             while (w != u){                                       //havent counted the comp yet
@@ -85,7 +96,7 @@ class Graph{
         } 
     }
     public static void main(String [] args){
-        String name = "L7g2";
+        String name = "L7g6";
         Graph g =null;
         try {
             BufferedReader b = new BufferedReader(new FileReader(new File(name)));

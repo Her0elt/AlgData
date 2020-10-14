@@ -116,9 +116,10 @@ class Wgraph{
                 String from = (g.node[i].index == nodeIndex)? "Start": String.valueOf(((Last)g.node[i].data).last.index);
                 System.out.format("%-7s%-7s%-7s%n",g.node[i].index,from,((Last)g.node[i].data).dist);
             }else{
-               System.out.format("%-7s%-7s%-7s%n",g.node[i].index,"","Not reached");
+                System.out.format("%-7s%-7s%-7s%n",g.node[i].index,"","Not reached");
             }
             
         }
+        System.out.println(name +" with start in "+nodeIndex);
     }
 }
