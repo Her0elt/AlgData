@@ -88,7 +88,7 @@ public class Compress {
         DataOutputStream os = new DataOutputStream(bos);
         Node tempTree = tree;
         int ch;
-        for (int i = 0; i<amount; ++i) {
+        for (int i = 0; i<amount-256; ++i) {
             ch = in.read();
         for (int pos = 128; pos > 0; pos/=2) {
           int siffer = ch / pos;
