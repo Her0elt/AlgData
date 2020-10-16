@@ -10,16 +10,24 @@ import java.util.PriorityQueue;
 
 public class Main {
     public static void main(String[] args) {
-        try {
-            // File file = new File("test");
-            // byte [] bytes = Files.readAllBytes(file.toPath());
-            // ZivD z = new ZivD(bytes);
-            // z.compress();
-            // String file = args[0];
-            // Ziv.compress(file);
-            Hoffman.compress("test");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // long i = 0;
+        // long x = 0;
+        // i =((i << 1) | 1);
+        // x =((x << 1)); 
+        // i =((i << 1) | 1);
+        // x =((x << 1)); 
+        // i =((i << 1) | 1);
+        // x =((x << 1)); 
+        // i =((i << 1) | 1);
+        // x =((x << 1)); 
+        // i =((i << 1) | 1);
+        // x =((x << 1)); 
+        // System.out.println(Long.toBinaryString(i));
+        // System.out.println(Long.toBinaryString(x));
+        ArrayList<String> s = new ArrayList<>();
+        s.add("nullssss");
+        s.add("ssssssss");
+        s.add("dddddddd");
+
     }  
 }

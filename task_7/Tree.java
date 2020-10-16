@@ -1,18 +1,3 @@
-
-class Node{
-    Node left;
-    Node right;
-    int count;
-    char letter;
-    public Node(int c, char l){
-        this.count = c;
-        this.letter = l;
-    }
-    public Node(int c){
-        this.count = c;
-    }
-}
-
 public class Tree {
     Node root;
 
@@ -25,11 +10,11 @@ public class Tree {
         int sum = this.root.count + n.root.count;
         Tree t = new Tree(new Node(sum));
         if(this.root.count > n.root.count){
-        t.root.left = this.root;
-        t.root.right = n.root;
+            t.root.left = this.root;
+            t.root.right = n.root;
         }else{
-        t.root.right = this.root;
-        t.root.left = n.root;
+            t.root.right = this.root;
+            t.root.left = n.root;
         }
         return t;
     }

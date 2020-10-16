@@ -1,58 +1,86 @@
- import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 
-class Compress {
-    byte[] buffer = new byte[1024];
-    byte[] bytes;
-    public void compress(String path) {
-        try {
-            File file = new File(path);
-            bytes = Files.readAllBytes(file.toPath());
-        } catch (IOException e) {
-            e.printStackTrace();
+public class Compress {
+    static void compress(String file) throws IOException {
+        int count[] = new int[256];
+        FileInputStream f = new FileInputStream(file);
+        int amount = f.available();
+        for (int i = 0; i < amount; ++i) {
+            int c = f.read();
+            count[c]++;
         }
-        int matchPos = -1;
-        int countMatches = 0;
-        int bufferPos = 0;
-        String output = "";
-        String cache = "";
-        for (int i = 0; i < bytes.length; i++) {
-            if(bufferPos == 1022) bufferPos = 0;
-            int match = checkInBuffer(bytes[i], bufferPos);
-            if(match > -1){
-                cache += (char) bytes[i];
-                matchPos = (matchPos > -1)? matchPos : match; 
-                if(matchPos != -1) countMatches++; else countMatches = 0;
-                System.out.println("pos: "+i+ " matches: "+countMatches+ " byte: "+(char)bytes[i]+ "  "+bytes[i]+" matchpos: " +match);
-            }else{
-                output += cache + (char)bytes[i];
-                countMatches = 0;
-                matchPos = -1;
-                cache = "";
-                buffer[bufferPos] = bytes[i]; 
-            }
-            if(countMatches == 8){
-                output += "-"+matchPos;
-                cache = "";
-                matchPos = -1;
-                countMatches = 0;
-            }
-            bufferPos++;
-            
+        f.close();
+        PriorityQueue<Node> pq = new PriorityQueue<>(256, (a, b) -> a.count - b.count);
+        pq.addAll(makeNodeList(count));
+        Node tree = Node.makeHuffmanTree(pq);
+        tree.printCode(tree, "");
+        FileInputStream in = new FileInputStream(file);
+        FileOutputStream out = new FileOutputStream("file.hoe");
+        for (int t : count) {
+            out.write(t);
+            System.out.println(t);
         }
-        System.out.println(output);
-
+        int input;
+        int writeByte = 0;
+        int i = 0;
+        int j = 0;
+        for (int k = 0; k < amount; ++k) {
+            input = in.read();
+            j = 0;
+            String bitString = tree.bitstring[input];
+            while (j < bitString.length()) {
+                writeByte *= 2;
+                if (bitString.charAt(j) == '1')
+                    writeByte++;
+                ++j;
+                ++i;
+                if (i == 8) {
+                    out.write(writeByte);
+                    i = 0;
+                    writeByte = 0;
+                }
+            }
+        }
+        while (i < 8) {
+            writeByte *= 2;
+            ++i;
+        }
+        out.write(writeByte);
+        in.close();
+        out.close();
     }
-    private int checkInBuffer(byte b, int pos){
-        for(int i = pos; i>=0; i--){
-            if(buffer[i] == b) return i;
+
+    private static ArrayList<Node> makeNodeList(int[] count) {
+        ArrayList<Node> nodeList = new ArrayList<>();
+        for (int i = 0; i < count.length; i++) {
+            nodeList.add(new Node(count[i], (char) i));
         }
-        return -1;
+        return nodeList;
+    }
+
+    static void decompress(String file) throws IOException {
+        FileInputStream in = new FileInputStream(file);
+        int [] count = new int [256];
+        for (int i = 0; i < count.length; i++) {
+            int freq = in.read();
+            count[i] = freq;
+        }
+        for (int t : count) {
+            System.out.println(t);
+        }
     }
     public static void main(String[] args) {
-        Compress c = new Compress();
-        c.compress("test");
+        try {
+            compress("diverse.txt");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
-
 }
