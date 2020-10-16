@@ -1,3 +1,6 @@
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -24,7 +27,7 @@ public class Compress {
         FileOutputStream out = new FileOutputStream("file.hoe");
         for (int t : count) {
             out.write(t);
-            System.out.println(t);
+            //if(t > 0) System.out.println(t);
         }
         int input;
         int writeByte = 0;
@@ -66,18 +69,47 @@ public class Compress {
 
     static void decompress(String file) throws IOException {
         FileInputStream in = new FileInputStream(file);
+        int amount = in.available();
         int [] count = new int [256];
         for (int i = 0; i < count.length; i++) {
             int freq = in.read();
             count[i] = freq;
         }
-        for (int t : count) {
-            System.out.println(t);
+        // System.out.println("new file");
+        // for (int t : count) {
+            //    if(t > 0) System.out.println(t);
+            // }
+        PriorityQueue<Node> pq = new PriorityQueue<>(256, (a, b) -> a.count - b.count);
+        pq.addAll(makeNodeList(count));
+        Node tree = Node.makeHuffmanTree(pq);
+        tree.printCode(tree, "");
+        FileOutputStream out = new FileOutputStream(new File("newfile"));
+        BufferedOutputStream bos = new BufferedOutputStream(out);
+        DataOutputStream os = new DataOutputStream(bos);
+        Node tempTree = tree;
+        int ch;
+        for (int i = 0; i<amount; ++i) {
+            ch = in.read();
+        for (int pos = 128; pos > 0; pos/=2) {
+          int siffer = ch / pos;
+          ch %= pos;
+          if (siffer == 0) tempTree = tempTree.left;
+          else tempTree = tempTree.right;
+          if (tempTree.left == null) {
+            os.writeByte(tempTree.letter);
+            tempTree = tree;
+          }
         }
+      }
+      in.close();
+      os.close();
+
+
     }
     public static void main(String[] args) {
         try {
-            compress("diverse.txt");
+            compress("test");
+            decompress("file.hoe");
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
