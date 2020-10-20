@@ -30,7 +30,7 @@ class Node{
         while(pq.size() > 1){
             Node t = pq.poll();
             Node n = pq.poll();
-            Node h = new Node('\0',findSum(t, n), t, n);
+            Node h = new Node('\0',findSum(t, n), n, t);
             pq.add(h);
             tree = h;
         }
@@ -42,7 +42,7 @@ class Node{
     }
 
     public void printCode(Node root, String s) { 
-        if (root.left != null) { 
+        if (root.left != null && root.right != null) { 
             printCode(root.left, s+"0");
             printCode(root.right, s+"1"); 
             
