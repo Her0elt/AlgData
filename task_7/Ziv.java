@@ -78,7 +78,6 @@ public class Ziv {
             int i = index%buffer.length;
             return buffer[i];
         }
-        //Fungerer
         else if(index < 0){
             int i = buffer.length+(index%buffer.length);
             if(i == buffer.length) i = 0;
