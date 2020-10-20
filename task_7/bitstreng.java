@@ -20,6 +20,21 @@ class bitstreng {
     lengde = s.lengde;
     biter = s.biter;
   }
+  bitstreng(int len, byte b){
+    this.lengde = len;
+    this.biter = convertByte(b, len);
+  }
+  public long convertByte(byte b, int length){
+    long temp = 0;
+    for(long i = 1<<length-1; i != 0; i >>= 1){
+        if((b & i) == 0){
+            temp = (temp << 1);
+        }
+        else temp = ((temp << 1) | 1);
+    }
+    return temp;
+}
+
 
   static bitstreng konkatenere(bitstreng s1, bitstreng s2) {
     bitstreng ny = new bitstreng();

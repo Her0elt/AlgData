@@ -1,6 +1,7 @@
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,7 +16,7 @@ import java.util.PriorityQueue;
 public class Compress {
     static void compress(String file) throws IOException {
         int count[] = new int[256];
-        FileInputStream f = new FileInputStream(file);
+        DataInputStream f = new DataInputStream(new FileInputStream(file));
         int amount = f.available();
         for (int i = 0; i < amount; ++i) {
             int c = f.read();
@@ -28,14 +29,14 @@ public class Compress {
         Node tree = Node.makeHuffmanTree(pq);
         tree.printCode(tree, "");
         FileInputStream in = new FileInputStream(file);
-        FileOutputStream out = new FileOutputStream("file.hoe");
+        DataOutputStream out = new DataOutputStream(new FileOutputStream("file.hoe"));
         for (int t : count) {
-            out.write(t);
-            //if(t > 0) System.out.println(t);
+            out.writeInt(t);
+            if(t > 0) System.out.println(t);
         }
-        System.out.println(tree.left.letter);
+        //System.out.println(tree.left.letter);
         int input;
-        long writeByte = 0b0;
+        long writeByte = 0L;
         int i = 0;
         int j = 0;
         ArrayList<Byte> bytes = new ArrayList<>();
@@ -43,6 +44,7 @@ public class Compress {
             input = in.read();
             j = 0;
             String bitString = tree.bitstring[input];
+            //System.out.println(bitString);
             while (j < bitString.length()) {
                 // writeByte *= 2;
                 // if (bitString.charAt(j) == '1')
@@ -56,7 +58,7 @@ public class Compress {
                     //out.write((byte)writeByte);
                     bytes.add((byte)writeByte);
                     i = 0;
-                    writeByte = 0b0;
+                    writeByte = 0L;
                 }
             }
         }
@@ -66,7 +68,7 @@ public class Compress {
             ++i;
         }
         bytes.add((byte)writeByte);
-        out.write(lastByte);
+        out.writeInt(lastByte);
         for (Byte s : bytes) {
             out.write(s);
         }
@@ -77,37 +79,50 @@ public class Compress {
     private static ArrayList<Node> makeNodeList(int[] count) {
         ArrayList<Node> nodeList = new ArrayList<>();
         for (int i = 0; i < count.length; i++) {
-            if(count[i] != 0)nodeList.add(new Node((char) i, count[i], null, null));
+            if(count[i] != 0){
+                //System.out.println(count[i] +"  "+(char)i);
+                nodeList.add(new Node((char) i, count[i], null, null));
+            }
         }
         return nodeList;
     }
+    public static long convertByte(byte b, int length){
+        long temp = 0;
+        for(long i = 1<<length-1; i != 0; i >>= 1){
+            if((b & i) == 0){
+                temp = (temp << 1);
+            }
+            else temp = ((temp << 1) | 1);
+        }
+        return temp;
+    }
 
     static void decompress(String file) throws IOException {
-        FileInputStream in = new FileInputStream(file);
-        int amount = in.available();
+        System.out.println("newfile");
+        DataInputStream in = new DataInputStream(new FileInputStream(file));
         //System.out.println();
         int [] count = new int [256];
         for (int i = 0; i < count.length; i++) {
-            int freq = in.read();
-            //System.out.println(freq);
+            int freq = in.readInt();
+            if(freq>0)System.out.println(freq);
             count[i] = freq;
         }
         // System.out.println("new file");
         // for (int t : count) {
         //        if(t > 0) System.out.println(t);
         // }
-        int lastByte = in.read();
+        int lastByte = in.readInt();
         System.out.println(lastByte +"last");
         PriorityQueue<Node> pq = new PriorityQueue<>(256, (a, b) -> a.count - b.count);
         pq.addAll(makeNodeList(count));
         Node tree = Node.makeHuffmanTree(pq);
-        tree.printCode(tree, "");
+        //tree.printCode(tree, "");
         FileOutputStream out = new FileOutputStream(new File("newfile"));
         BufferedOutputStream bos = new BufferedOutputStream(out);
         DataOutputStream os = new DataOutputStream(bos);
         //System.out.println(tree.left.right.letter);
         Node tempTree = tree;
-        int ch;
+        byte ch;
         byte [] bytes = in.readAllBytes();
         in.close();
         int rest = 0;
@@ -120,44 +135,36 @@ public class Compress {
             ch = bytes[i];
             bitstreng b = new bitstreng(8, ch);
             h = bitstreng.konkatenere(h,b);
+            h = writeChar(tree, h, os);    
+        }
+        if(lastByte>0){
+            bitstreng b = new bitstreng(lastByte, bytes[length]>>(8-lastByte));
+            h = bitstreng.konkatenere(h, b);
+            writeChar(tree, h, os);
+        }
+        in.close();
+        os.close();
+    }
+
+    private static bitstreng writeChar(Node tree ,bitstreng h, DataOutputStream os) throws IOException {
+            Node tempTree = tree;
+            int c=0;
             for (long j = 1<< h.lengde-1; j!=0; j>>=1) {
                 c++;
                 if((h.biter & j) == 0)tempTree = tempTree.left;
                 else tempTree = tempTree.right;
-                if(tempTree.left == null && tempTree.right == null){
-                    os.write((byte)tempTree.letter);
-                    long temp = ~(0 << (h.lengde-c));
+                if(tempTree.left == null){
+                    long cha = tempTree.letter;
+                    os.write((byte)cha);
+                    long temp =(long) ~(0 << (h.lengde-c));
                     h.biter = (h.biter & temp);
                     h.lengde = h.lengde-c;
                     c = 0;
                     tempTree = tree;
                 }
             }
-            
+            return h;
         }
-                if(lastByte>0){
-                    bitstreng b = new bitstreng(lastByte, bytes[length]>>lastByte);
-                    h = bitstreng.konkatenere(h, b);
-                for (long j = 1<< h.lengde-1; j!=0; j>>=1) {
-                    c++;
-                    if((h.biter & j) == 0)tempTree = tempTree.left;
-                    else tempTree = tempTree.right;
-                    if(tempTree.left == null && tempTree.right == null){
-                        os.write((byte)tempTree.letter);
-                        long temp = ~(0 << (h.lengde-c));
-                        h.biter = (h.biter & temp);
-                        h.lengde = h.lengde-c;
-                        c = 0;
-                        tempTree = tree;
-                    }
-                }
-                }
-               
-        
-
-                in.close();
-                os.close();
-    }
     public static void main(String[] args) {
         try {
             compress("diverse.txt");
