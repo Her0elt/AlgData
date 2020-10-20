@@ -118,6 +118,7 @@ public class Huffman {
             writeChar(tree, h, out);
         }
         in.close();
+        out.flush();
         out.close();
     }
 

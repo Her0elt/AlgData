@@ -1,24 +1,17 @@
 import java.io.IOException;
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.PriorityQueue;
 
 public class Main {
     public static void main(String[] args) {
         String inputFile = "diverse.txt";
-        String compressOutputFile = "EltonZipped";
-        String decompressOutputfile ="weDidIT";
+        String HuffcompressOutputFile = "EltonZipped";
+        String ZivOutputFile = "ELTON";
+        String HuffdecompressOutputfile ="weDidIT";
+        String decompressOutputfile = "WEDITIT";
         try {
-            Ziv.compress(inputFile, compressOutputFile);
-            Huffman.compress(compressOutputFile, compressOutputFile);
-            Huffman.decompress(compressOutputFile, decompressOutputfile);
-            Ziv.decompress(decompressOutputfile, decompressOutputfile);
+            Ziv.compress(inputFile, HuffcompressOutputFile);
+            Huffman.compress(HuffcompressOutputFile, ZivOutputFile);
+            Huffman.decompress(ZivOutputFile, HuffdecompressOutputfile);
+            Ziv.decompress(HuffdecompressOutputfile, decompressOutputfile);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
