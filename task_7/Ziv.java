@@ -1,14 +1,20 @@
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class Ziv {
-    byte[] bytes;
-    byte[] buffer = new byte[1024*8];
-    int position = 0;
+    static byte[] buffer;
+    static int position = 0;
+    static byte[] bytes;
 
-    public Ziv(byte[] bytes){
-        this.bytes = bytes;
-    }
-
-
-    public void compress(){
+    public static void compress(String file, String outputFile)throws IOException {
+        DataInputStream in = new DataInputStream(new FileInputStream(file));
+        DataOutputStream out = new DataOutputStream(new FileOutputStream(outputFile));
+        bytes = in.readAllBytes();
+        in.close();
+        buffer = new byte[1024*32];
         int last = 0;
         for(int i = 0; i<bytes.length; i++){
             int posBuff = checkInBuffer(bytes[i], i);
@@ -26,14 +32,14 @@ public class Ziv {
                         maxIndex = posBuff;
                     }
                 }
-                if(max > 8){
-                    String temp = "-"+(i-maxIndex)+" "+max;
-                    
-                    for(int j = last; j<position;j++){
-                        System.out.print((char)buffer[j]);
-                        
-                    }
-                    System.out.print(temp);
+                if(max > 6){
+                    out.writeShort((short)(position-last));
+                    byte[] temp = new byte[position-last];
+                    int count = 0;
+                    for(int j = last; j<position;j++) temp[count++] = (byte)bytes[j];
+                    out.write(temp);
+                    out.writeShort((short)(-(i-maxIndex)));
+                    out.writeShort((short)max);
                     for(int j = 0; j<max; j++){
                         buffer[position++] = bytes[i++];
                     }
@@ -43,19 +49,56 @@ public class Ziv {
                 else buffer[position++] = bytes[i];
             }
         }
-        for(int i = last; i<position; i++){
-            System.out.print((char)bytes[i]);
-        }
-    }
+        out.writeShort((short)(position-last));
+        for(int i = last; i<position; i++) out.writeByte(bytes[i]);
+        out.close();
 
-    private int checkInBuffer(byte b, int pos){
+       
+    }
+    public static void decompress(String path, String outputFile) throws IOException{
+        DataOutputStream out = new DataOutputStream(new FileOutputStream(outputFile));
+        DataInputStream in = new DataInputStream(new FileInputStream(path));
+        position = 0;
+        buffer = new byte[1024*32];
+        short start = in.readShort();
+        bytes = new byte[start];
+        in.readFully(bytes);
+        out.write(bytes);
+        for(int j = 0; j<start; j++){
+            buffer[position++] = bytes[j];
+        }
+        while(in.available() > 0){
+            short back = in.readShort();
+            short copyAmount = in.readShort();
+            int end = buffer[position];
+            bytes = new byte[copyAmount];
+            int i = 0;
+            int tempPos = position;
+            for(int tempIndex = end+back; tempIndex<(end+back)+copyAmount; tempIndex++){
+                byte index = buffer[tempPos+tempIndex];
+                bytes[i++] = index;
+                buffer[position++] =index;
+            }
+            out.write(bytes);
+            start = in.readShort();
+            bytes = new byte[start];
+            in.readFully(bytes);
+            for(int j = 0; j<start; j++){
+                buffer[position++] = bytes[j];
+            }
+            out.write(bytes);
+        }
+        in.close();
+        out.close();
+    }
+    private static int checkInBuffer(byte b, int pos){
         for(int i = pos; i>=0; i--){
             if(buffer[i] == b) return i;
         }
         return -1;
     }
 
-    private int buildWord(int posBuff, int posByte){
+    private static int buildWord(int posBuff, int posByte){
         byte byte1 = bytes[posByte];
         byte buff1 = buffer[posBuff];
         int count = 0;
@@ -63,15 +106,17 @@ public class Ziv {
             count++;
             byte1 = bytes[++posByte];
             buff1 = buffer[++posBuff];
-            if(buff1 == (byte)'-'){
-                int i = posBuff;    
-                int nr = 0;
-                while(buffer[++i] != (byte)' ') nr += (char)buffer[i];
-                i = nr;
-                posBuff -= i;
-                buff1 = buffer[posBuff];
-            }
         }
         return count;
+    
+    }
+    public static void main(String[] args) {
+        try {
+            Ziv.compress("diverse.txt", "man.hoe");
+            Ziv.decompress("man.hoe","man");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }

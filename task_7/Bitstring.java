@@ -4,23 +4,23 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-class bitstreng {
+class Bitstring {
   int lengde; 
   long biter; 
 
-  bitstreng() {
+  Bitstring() {
   }
 
-  bitstreng(int len, long bits) {
+  Bitstring(int len, long bits) {
     lengde = len;
     biter = bits;
   }
 
-  bitstreng(bitstreng s) {
+  Bitstring(Bitstring s) {
     lengde = s.lengde;
     biter = s.biter;
   }
-  bitstreng(int len, byte b){
+  Bitstring(int len, byte b){
     this.lengde = len;
     this.biter = convertByte(b, len);
   }
@@ -36,8 +36,8 @@ class bitstreng {
 }
 
 
-  static bitstreng konkatenere(bitstreng s1, bitstreng s2) {
-    bitstreng ny = new bitstreng();
+  static Bitstring concat(Bitstring s1, Bitstring s2) {
+    Bitstring ny = new Bitstring();
     ny.lengde = s1.lengde + s2.lengde;
     if (ny.lengde > 64) {
       System.out.println("For lang bitstreng, gÃ¥r ikke!");
@@ -46,12 +46,12 @@ class bitstreng {
     ny.biter = s2.biter | (s1.biter << s2.lengde);
     return ny;
   }
-  bitstreng plukkut(int antall, int posisjon) {
+  Bitstring plukkut(int antall, int posisjon) {
     if (posisjon < 0 || antall < 0 || posisjon + antall > lengde) {
       System.out.println("Umulig kombinasjon av posisjon og antall");
       return null;
     }
-    bitstreng ny = new bitstreng();
+    Bitstring ny = new Bitstring();
     ny.lengde = antall;
     long maske = (1L << (lengde - posisjon)) - 1;
     int forskyving = lengde - antall - posisjon;
@@ -83,49 +83,3 @@ class bitstreng {
   }
   
 }
-
-class ByteWriter {
-   boolean isLast = false;
-   bitstreng last;
-   DataOutputStream os;
-   bitstreng bitstring;
-
-   ByteWriter() throws FileNotFoundException {
-    os = new DataOutputStream(new FileOutputStream(new File("file")));
-  }
-
-  public  void writeByte(bitstreng s) throws IOException {
-      bitstreng b = new bitstreng(s);
-      if(isLast){
-        b = bitstreng.konkatenere(last, b);
-      }
-      if(s.lengde <8){
-        isLast = true;
-        last = b;
-        return;
-      }
-
-      int amount = 8;
-      int div = b.lengde/amount;
-      int rest = b.lengde%amount;
-      byte[] t = new byte[div];
-      for (int i = 0; i < div; i++) {
-        t[i] = (byte)(b.biter>> (rest+div-1-i)*amount);
-        System.out.println(t[i]);
-      }
-      os.write(t);
-      if(rest != 0){
-        isLast = true;
-        int y = (0b11111111 >> (8-rest));
-        long c = (byte) b.biter & y;
-        last = new bitstreng(rest, c);
-      }else{
-        isLast = false;
-        last = null;
-      }
-
-    }
-    // static void close() throws IOException {
-    //   os.close();
-    // }
-  }
