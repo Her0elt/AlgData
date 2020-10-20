@@ -14,7 +14,7 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 
 public class Huffman {
-    static void compress(String file, String outputFile) throws IOException {
+    static void compress(File file, String outputFile) throws IOException {
         int count[] = new int[256];
         DataInputStream f = new DataInputStream(new FileInputStream(file));
         int amount = f.available();
@@ -87,7 +87,7 @@ public class Huffman {
         return temp;
     }
 
-    static void decompress(String file, String outputFile) throws IOException {
+    static void decompress(String file, File outputFile) throws IOException {
         DataInputStream in = new DataInputStream(new FileInputStream(file));
         int [] count = new int [256];
         for (int i = 0; i < count.length; i++) {
@@ -142,12 +142,12 @@ public class Huffman {
             return h;
         }
     public static void main(String[] args) {
-        try {
-            compress("diverse.txt", "file.hoe");
-            decompress("file.hoe", "newfile");
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        // try {
+        //     compress("diverse.txt", "file.hoe");
+        //     decompress("file.hoe", "newfile");
+        // } catch (IOException e) {
+        //     // TODO Auto-generated catch block
+        //     e.printStackTrace();
+        // }
     }
 }
