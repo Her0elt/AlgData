@@ -19,7 +19,7 @@ class Node {
     
     @Override
     public String toString() {
-       return this.latitude*(Math.PI/180)+","+ this.longitude*(Math.PI/180);
+       return this.latitude*(180/Math.PI)+","+ this.longitude*(180/Math.PI);
     }
 
 

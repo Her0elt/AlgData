@@ -1,16 +1,11 @@
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.PriorityQueue;
+import java.util.Scanner;
 import java.util.StringTokenizer;
 
 class Graph {
@@ -34,8 +29,8 @@ class Graph {
         for (int i = 0; i < N; ++i) {
             st = new StringTokenizer(nodes.readLine());
             int index = Integer.parseInt(st.nextToken());
-            double lat = Double.parseDouble(st.nextToken())*(180 / Math.PI);
-            double lon = Double.parseDouble(st.nextToken())*(180 / Math.PI);
+            double lat = Double.parseDouble(st.nextToken())*(Math.PI/180);
+            double lon = Double.parseDouble(st.nextToken())*(Math.PI/180);
             node[index] = new Node(index, lat, lon);
             node[index].data = new Last();
             node[index].cos_width = Math.cos(lat);
@@ -77,8 +72,8 @@ class Graph {
         double sin_width = Math.sin((n1.latitude - n2.latitude) / 2.0);
         double sin_length = Math.sin((n1.longitude - n1.longitude) / 2.0);
         //41701090.90909090909090909091
-        //35285538.46153846153846153846
-        return (int) (2*6371
+        //35285538.46153846153846153846 
+        return (int) (35285538.46153846153846153846
                 * Math.asin(Math.sqrt(sin_width * sin_width + n1.cos_width * n2.cos_width * sin_length * sin_length)));
     }
 
@@ -156,17 +151,20 @@ class Graph {
         }
     }
     void shorten(Node n, Vertex v, Node e) {
-        if(v.to.data.distToEnd == -1){
-            int dist = distance(v.to, e);
-            v.to.data.distToEnd = dist;
-            v.to.data.fullDist = dist + v.to.data.dist;
-        }
         Last nd = n.data, md = v.to.data;
         if (md.dist > nd.dist + v.weight) {
+            if(md.distToEnd == -1)md.distToEnd = distance(v.to, e);
             md.dist = nd.dist + v.weight;
             md.last = n;
             md.fullDist = md.dist + md.distToEnd;
             this.queue.add(v.to);
+        }
+    }
+    public void reset(){
+        for (Node n : this.node) {
+            n.data = new Last();
+            n.done = false;
+            n.end = false;
         }
     }
     public static void run_dijkstra_find_type(Graph g, int start, int type){
@@ -232,12 +230,13 @@ class Graph {
         } catch (IOException e) {
             e.printStackTrace();
         }   
-        //6013683
-        //6225195
-        int type = 2;
+        run_dijkstra_find_type(g, 2, 0);
         int start = g.places.get("\"Trondheim\"");
         int end = g.places.get("\"Helsinki\"");
-        //run_astar(g, start, end);
+        run_astar(g, start, end);
+        g.reset();
         run_dijkstra(g, start, end);
+        
+        
     }
 }
