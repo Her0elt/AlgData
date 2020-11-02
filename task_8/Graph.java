@@ -5,7 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.PriorityQueue;
-import java.util.Scanner;
 import java.util.StringTokenizer;
 
 class Graph {
@@ -13,7 +12,7 @@ class Graph {
     int K;
     Node[] node;
     PriorityQueue<Node> queue;
-    HashMap<String, Integer> places;
+    HashMap<String, Integer> places; //only used to find places
 
     public Graph(BufferedReader nodes, BufferedReader vertexes, BufferedReader names) throws IOException {
         this.places = new HashMap<>();
@@ -89,17 +88,17 @@ class Graph {
     public Node[] dijkstra_find_type(Node s, int t) {
         make_prio();
         Node[] list = new Node[10];
+        s.data.dist = 0;
         this.queue.add(s);
         int count = 0;
-        for (int i = this.N; i > 1; --i) {
+        while(!this.queue.isEmpty()) {
             Node n = this.queue.poll();
-            if ((n.type == t || (t == 2 || t == 4) && n.type == 6) && !n.done) {
+            if ((n.type == t || n.type == 6)) {
                 list[count] = n;
                 count++;
                 n.done = true;
             }
-            if (count == 10)
-            break;
+            if (count == 10)break;
             for (Vertex k = n.vertex1; k != null; k = k.next) {
                 shorten(n, k);
             }
@@ -113,7 +112,7 @@ class Graph {
         make_prio();
         this.queue.add(s);
         int count = 0;
-        while (this.queue.size() > 0) {
+        while (!this.queue.isEmpty()) {
             Node n = this.queue.poll();
             count++;
             if (n.end)return count;
@@ -132,7 +131,7 @@ class Graph {
         make_prio_astar();
         this.queue.add(s);
         int count = 0;
-        while (this.queue.size() > 0) {
+        while (!this.queue.isEmpty()) {
             Node n = this.queue.poll();
             count++;
             if (n.end)return count;
@@ -184,7 +183,7 @@ class Graph {
         Node n = g.node[end];
         try {
             FileWriter os = new FileWriter("dijkstra.txt");
-            System.out.println(n.data.dist);
+            System.out.println("Total time by driving: "+n.data.dist/360000+"h");
             while(n !=null){
             os.write(n.toString()+"\n");
             n = ((Last)n.data).last;
@@ -206,7 +205,7 @@ class Graph {
         Node n = g.node[end];
         try {
             FileWriter os = new FileWriter("astar.txt");
-            System.out.println(n.data.dist);
+            System.out.println("Total time by driving: "+n.data.dist/360000+"h");
             while(n !=null){
             os.write(n.toString()+"\n");
             n = ((Last)n.data).last;
@@ -230,12 +229,18 @@ class Graph {
         } catch (IOException e) {
             e.printStackTrace();
         }   
-        run_dijkstra_find_type(g, 2, 0);
+        //1117256 4
+        //6198111 2
+        //run_dijkstra_find_type(g, 6198111, 2);
+        //g.reset();
+        //1221382
+        //6013683
+        //6225195
         int start = g.places.get("\"Trondheim\"");
         int end = g.places.get("\"Helsinki\"");
-        run_astar(g, start, end);
+        run_astar(g, 6013683, 6013683);
         g.reset();
-        run_dijkstra(g, start, end);
+        run_dijkstra(g, 6013683, 6225195);
         
         
     }
