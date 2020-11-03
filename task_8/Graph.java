@@ -183,7 +183,9 @@ class Graph {
         Node n = g.node[end];
         try {
             FileWriter os = new FileWriter("dijkstra.txt");
-            System.out.println("Total time by driving: "+n.data.dist/360000+"h");
+            System.out.println("Total time by driving: "+(double)n.data.dist/360000+"h");
+            System.out.println("Total time by driving: "+(double)n.data.dist/6000+"min");
+            System.out.println("Total time by driving: "+(double)n.data.dist/100+"s");
             while(n !=null){
             os.write(n.toString()+"\n");
             n = ((Last)n.data).last;
@@ -205,7 +207,9 @@ class Graph {
         Node n = g.node[end];
         try {
             FileWriter os = new FileWriter("astar.txt");
-            System.out.println("Total time by driving: "+n.data.dist/360000+"h");
+            System.out.println("Total time by driving: "+(double)n.data.dist/360000+"h");
+            System.out.println("Total time by driving: "+(double)n.data.dist/6000+"min");
+            System.out.println("Total time by driving: "+(double)n.data.dist/100+"s");
             while(n !=null){
             os.write(n.toString()+"\n");
             n = ((Last)n.data).last;
@@ -238,7 +242,7 @@ class Graph {
         //6225195
         int start = g.places.get("\"Trondheim\"");
         int end = g.places.get("\"Helsinki\"");
-        run_astar(g, 6013683, 6013683);
+        run_astar(g, 6013683, 6225195);
         g.reset();
         run_dijkstra(g, 6013683, 6225195);
         
