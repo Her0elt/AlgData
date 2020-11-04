@@ -69,7 +69,7 @@ class Graph {
 
     private int distance(Node n1, Node n2) {
         double sin_width = Math.sin((n1.latitude - n2.latitude) / 2.0);
-        double sin_length = Math.sin((n1.longitude - n1.longitude) / 2.0);
+        double sin_length = Math.sin((n1.longitude - n2.longitude) / 2.0);
         //41701090.90909090909090909091
         //35285538.46153846153846153846 
         return (int) (35285538.46153846153846153846
@@ -242,9 +242,9 @@ class Graph {
         //6225195
         int start = g.places.get("\"Trondheim\"");
         int end = g.places.get("\"Helsinki\"");
-        run_astar(g, 6013683, 6225195);
+        run_astar(g, start, 1221382);
         g.reset();
-        run_dijkstra(g, 6013683, 6225195);
+        run_dijkstra(g, start, 1221382);
         
         
     }
