@@ -183,9 +183,10 @@ class Graph {
         Node n = g.node[end];
         try {
             FileWriter os = new FileWriter("dijkstra.txt");
-            System.out.println("Total time by driving: "+(double)n.data.dist/360000+"h");
-            System.out.println("Total time by driving: "+(double)n.data.dist/6000+"min");
-            System.out.println("Total time by driving: "+(double)n.data.dist/100+"s");
+            int s = n.data.dist/100;
+            System.out.print("Total time by driving: "+s/3600+" : ");
+            System.out.print((s%3600)/60+" : ");
+            System.out.print((s%3600)%60+"\n");
             while(n !=null){
             os.write(n.toString()+"\n");
             n = ((Last)n.data).last;
@@ -207,9 +208,10 @@ class Graph {
         Node n = g.node[end];
         try {
             FileWriter os = new FileWriter("astar.txt");
-            System.out.println("Total time by driving: "+(double)n.data.dist/360000+"h");
-            System.out.println("Total time by driving: "+(double)n.data.dist/6000+"min");
-            System.out.println("Total time by driving: "+(double)n.data.dist/100+"s");
+            int s = n.data.dist/100;
+            System.out.print("Total time by driving: "+s/3600+" : ");
+            System.out.print((s%3600)/60+" : ");
+            System.out.print((s%3600)%60+"\n");
             while(n !=null){
             os.write(n.toString()+"\n");
             n = ((Last)n.data).last;

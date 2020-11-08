@@ -58,7 +58,7 @@ class HashTabell{
 
         void insert(string s){
             int h = hash(s);
-            if(!nodes[h]){
+            if(nodes[h] == nullptr){
                 nodes[h] = new HashNode(s,NULL);
             }else{
                 nodes[h] = new HashNode(s,nodes[h]);;
