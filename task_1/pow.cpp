@@ -75,7 +75,7 @@ int main() {
     testTime(x,100, pow); 
     testTime(x,1000, pow);      
     testTime(x,100000, pow);
-
+    
     //As we can see from running this program algo is alot slower then algo2 
     //when n grows lager and lager. the pow function beats both the algorithmes,
     //that is because it has a time complexity of O(1)

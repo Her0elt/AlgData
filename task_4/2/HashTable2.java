@@ -110,7 +110,7 @@ public class HashTable2 {
         HashMap<Integer,Integer> h = new HashMap<>();
         for(int i = 0; i<length-1;i++ ){
             start = System.nanoTime();
-            h.put(i,nrs[i]);
+            h.put(nrs[i],nrs[i]);
             end = System.nanoTime();
             totalT += end-start;
         }

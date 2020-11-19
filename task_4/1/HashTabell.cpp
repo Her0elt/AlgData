@@ -44,6 +44,10 @@ class HashTabell{
         HashTabell(int length){
             this->length = length;
             collisions = 0;
+            for (int i = 0; i < length; i++){
+                nodes[i] = NULL;
+            }
+            
         }
 
         int hash(string s){
@@ -57,12 +61,22 @@ class HashTabell{
         }
 
         void insert(string s){
+            string output;
             int h = hash(s);
-            if(nodes[h] == nullptr){
+            if(nodes[h] == NULL){
                 nodes[h] = new HashNode(s,NULL);
             }else{
+                output += nodes[h]->data + "-->";
                 nodes[h] = new HashNode(s,nodes[h]);;
+                output += nodes[h]->data;
                 collisions++;
+                
+            }
+            if(output != ""){
+                printf("%s",output.c_str());
+                printf("\n");
+            }else{
+                printf("%s",output.c_str());
             }
         }
 
@@ -76,25 +90,19 @@ class HashTabell{
         }
 
         void print(){
-            printf("nr of collisions %d \n", collisions);
-            string output = "";
             HashNode* temp = new HashNode();
             int nr_people = 0;
             for(int i = 0; i<length; i++){
-                if(nodes[i]){
+                if(nodes[i] != NULL){
                     temp =  nodes[i];
-                    output += temp->data;
-                    nr_people++;
-                    while(!temp->next){
+                    while(temp->next != NULL){
                         temp = temp->next;
-                        output += "->"+ temp->data;
                         nr_people++;
 
                     }
                 }
-                output += "\n";
             }
-            printf("%s", output.c_str());
+            printf("nr of collisions %d \n", collisions);
             printf("Load factor %d\n", (nr_people/length));
             printf("avarage collisions pr person %d", (collisions/nr_people));
 
