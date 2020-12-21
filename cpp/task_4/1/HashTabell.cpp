@@ -42,9 +42,9 @@ class HashTabell{
     
     public:
         HashTabell(int length){
-            this->length = length;
+            this->length = length/2;
             collisions = 0;
-            for (int i = 0; i < length; i++){
+            for (int i = 0; i < this->length; i++){
                 nodes[i] = NULL;
             }
             
@@ -95,7 +95,7 @@ class HashTabell{
             for(int i = 0; i<length; i++){
                 if(nodes[i] != NULL){
                     temp =  nodes[i];
-                    while(temp->next != NULL){
+                    while(temp != NULL){
                         temp = temp->next;
                         nr_people++;
 
@@ -103,8 +103,8 @@ class HashTabell{
                 }
             }
             printf("nr of collisions %d \n", collisions);
-            printf("Load factor %d\n", (nr_people/length));
-            printf("avarage collisions pr person %d", (collisions/nr_people));
+            printf("Load factor %f\n", (double)(nr_people/length));
+            printf("avarage collisions pr person %f", ((double)collisions/(double)nr_people));
 
         }
 };

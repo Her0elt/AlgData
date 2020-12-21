@@ -86,7 +86,7 @@ class HashTabell{
     public static void main(String[] args) {
         HashTabell ht = new HashTabell(86);
         try {
-            BufferedReader b = new BufferedReader(new FileReader(new File("name.txt")));
+            BufferedReader b = new BufferedReader(new FileReader(new File("/home/hermanoe/projects/Algo and datastruck/task_4/1/name.txt")));
             String text;
             while((text = b.readLine() )!= null){
                 ht.insert(text);

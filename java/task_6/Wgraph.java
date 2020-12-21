@@ -83,7 +83,7 @@ class Wgraph{
        for (int i = 0; i < N; i++) {
 
             this.queue.add(node[i]);
-        }
+        }   
     }
     
  
@@ -99,7 +99,7 @@ class Wgraph{
     }
 
     public static void main(String [] args) {
-        String name = "vg2";
+        String name = "vg1";
         Wgraph g =null;
         try {
             BufferedReader b = new BufferedReader(new FileReader(new File(name)));
@@ -107,7 +107,7 @@ class Wgraph{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        int nodeIndex = 7;
+        int nodeIndex = 1;
         Node node = g.node[nodeIndex];
         g.dijkstra(node);
         System.out.format("%-7s%-7s%-7s%n", "Node","From", "Dist");

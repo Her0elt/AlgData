@@ -110,7 +110,7 @@ int main() {
         clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
         ht.insert(nrs[i]);
         clock_gettime(CLOCK_THREAD_CPUTIME_ID, &stop);
-        time += stop.tv_nsec - start.tv_nsec;
+        time += stop.tv_nsec - start.tv_nsec ;
     }
         printf("size: %d \n", length);
         printf("time: %f ms \n", time/1000000);
